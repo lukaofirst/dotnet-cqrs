@@ -1,6 +1,4 @@
-﻿using Application.Interfaces;
-using Application.Mappings;
-using Application.Services;
+﻿using Application.Mappings;
 using Domain.Interfaces;
 using Infra.Data;
 using Infra.Repositories;
@@ -27,7 +25,6 @@ namespace IoC
 
 			// AutoMapper
 			services.AddAutoMapper(typeof(DomainToDTO));
-			services.AddAutoMapper(typeof(DomainToCommand));
 
 			// Mediator
 			var myHandlers = AppDomain.CurrentDomain.Load("Application");
