@@ -1,24 +1,27 @@
-﻿using Application.Features.Persons.Commands;
+﻿using Application.Exceptions;
+using Application.Features.Persons.Commands;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 
 namespace Application.Features.Persons.Handlers
 {
-    public class PersonUpdateCommandHandler : IRequestHandler<PersonUpdateCommand, Person?>
-    {
-        private readonly IPersonRepository _personRepository;
+	public class PersonUpdateCommandHandler(
+		IPersonRepository personRepository,
+		IMapper mapper)
+		: IRequestHandler<PersonUpdateCommand, Person?>
+	{
+		public async Task<Person?> Handle(PersonUpdateCommand command, CancellationToken cancellationToken)
+		{
+			var request = command.Request;
 
-        public PersonUpdateCommandHandler(IPersonRepository personRepository)
-        {
-            _personRepository = personRepository;
-        }
+			var person = mapper.Map<Person>(request);
 
-        public async Task<Person?> Handle(PersonUpdateCommand request, CancellationToken cancellationToken)
-        {
-            var updatedPerson = new Person(request.Id, request.Name, request.Age);
+			var result = await personRepository.Update(person) ??
+				throw new EntityNotFoundException("Could not update entity, because it doesn't exist in our database");
 
-            return await _personRepository.Update(updatedPerson);
-        }
-    }
+			return result;
+		}
+	}
 }

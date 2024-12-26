@@ -1,16 +1,14 @@
 ﻿namespace Application.Responses
 {
-    public class ErrorResponse
-    {
-        public string? Message { get; }
-        public int StatusCode { get; }
-        public string? StackTrace { get; set; }
+	public class ErrorResponse
+	{
+		public string? Message { get; }
+		public int StatusCode { get; }
 
-        public ErrorResponse(string message, int statusCode, string stackTrace)
-        {
-            Message = message;
-            StatusCode = statusCode;
-            StackTrace = stackTrace;
-        }
-    }
+		public ErrorResponse(string message, int statusCode)
+		{
+			Message = message;
+			StatusCode = statusCode;
+		}
+	}
 }

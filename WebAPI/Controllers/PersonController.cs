@@ -1,114 +1,104 @@
 ﻿using Application.DTOs;
-using Application.Interfaces;
+using Application.Features.Persons.Commands;
+using Application.Features.Persons.Queries;
 using Application.Responses;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace WebAPI.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class PersonController : ControllerBase
-    {
-        private readonly IPersonService _personService;
+	[ApiController]
+	[Route("api/[controller]")]
+	public class PersonController(ISender sender) : ControllerBase
+	{
+		[HttpGet]
+		public async Task<IActionResult> GetAll()
+		{
+			var result = await sender.Send(new GetPersonsQuery());
 
-        public PersonController(IPersonService personService)
-        {
-            _personService = personService;
-        }
+			return Ok(new SuccessResponse((int)HttpStatusCode.OK, result));
+		}
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
+		[HttpGet("{id}")]
+		public async Task<IActionResult> GetById(int id)
+		{
+			try
+			{
+				var result = await sender.Send(new GetPersonByIdQuery(id));
 
-            var result = await _personService.GetAll();
+				return Ok(new SuccessResponse((int)HttpStatusCode.OK, result));
+			}
+			catch (Exception ex)
+			{
+				return NotFound(
+					new ErrorResponse(
+						ex.Message, (int)HttpStatusCode.NotFound)
+					);
+			}
+		}
 
-            return Ok(new SuccessResponse((int)HttpStatusCode.OK, result));
-        }
+		[HttpPost]
+		public async Task<IActionResult> Post(PersonDTO personDTO)
+		{
+			try
+			{
+				await sender.Send(new PersonInsertCommand(personDTO));
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            try
-            {
-                var result = await _personService.GetById(id);
+				return Ok(
+					new SuccessResponse(
+						(int)HttpStatusCode.OK, "Person was created successfully!")
+					);
+			}
+			catch (Exception ex)
+			{
+				return Conflict(
+					new ErrorResponse(
+						ex.Message, (int)HttpStatusCode.Conflict)
+					);
+			}
+		}
 
-                return Ok(new SuccessResponse((int)HttpStatusCode.OK, result));
-            }
-            catch (Exception ex)
-            {
-                return NotFound(
-                    new ErrorResponse(
-                        ex.Message, (int)HttpStatusCode.NotFound, ex.StackTrace!
-                        )
-                    );
-            }
-        }
+		[HttpPut]
+		public async Task<IActionResult> Update(PersonDTO personDTO)
+		{
+			try
+			{
+				await sender.Send(new PersonUpdateCommand(personDTO));
 
-        [HttpPost]
-        public async Task<IActionResult> Post(PersonDTO personDTO)
-        {
-            try
-            {
-                await _personService.Insert(personDTO);
+				return Ok(
+				   new SuccessResponse(
+					   (int)HttpStatusCode.OK, "Person was updated successfully!")
+				   );
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(
+					new ErrorResponse(
+						ex.Message, (int)HttpStatusCode.BadRequest)
+					);
+			}
+		}
 
-                return Ok(
-                    new SuccessResponse(
-                        (int)HttpStatusCode.OK, "Person was created successfully!")
-                    );
-            }
-            catch (Exception ex)
-            {
-                return Conflict(
-                    new ErrorResponse(
-                        ex.Message, (int)HttpStatusCode.Conflict, ex.StackTrace!
-                        )
-                    );
-            }
-        }
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> Delete(int id)
+		{
+			try
+			{
+				await sender.Send(new PersonDeleteCommand(id));
 
-        [HttpPut]
-        public async Task<IActionResult> Update(PersonDTO personDTO)
-        {
-            try
-            {
-                await _personService.Update(personDTO);
-
-                return Ok(
-                   new SuccessResponse(
-                       (int)HttpStatusCode.OK, "Person was updated successfully!")
-                   );
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(
-                    new ErrorResponse(
-                        ex.Message, (int)HttpStatusCode.BadRequest, ex.StackTrace!
-                        )
-                    );
-            }
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                await _personService.Delete(id);
-
-                return Ok(
-                   new SuccessResponse(
-                       (int)HttpStatusCode.OK, "Person was deleted successfully!")
-                   );
-            }
-            catch (Exception ex)
-            {
-                return NotFound(
-                    new ErrorResponse(
-                        ex.Message, (int)HttpStatusCode.NotFound, ex.StackTrace!
-                        )
-                    );
-            }
-        }
-    }
+				return Ok(
+				   new SuccessResponse(
+					   (int)HttpStatusCode.OK, "Person was deleted successfully!")
+				   );
+			}
+			catch (Exception ex)
+			{
+				return NotFound(
+					new ErrorResponse(
+						ex.Message, (int)HttpStatusCode.NotFound)
+					);
+			}
+		}
+	}
 }

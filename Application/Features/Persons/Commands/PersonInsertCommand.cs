@@ -1,6 +1,9 @@
-﻿namespace Application.Features.Persons.Commands
+﻿using Application.DTOs;
+
+namespace Application.Features.Persons.Commands
 {
-    public class PersonInsertCommand : PersonCommand
-    {
-    }
+	public class PersonInsertCommand(PersonDTO request)
+		: PersonCommand(request)
+	{
+	}
 }

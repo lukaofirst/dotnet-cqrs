@@ -1,21 +1,23 @@
-﻿using Application.Features.Persons.Commands;
+﻿using Application.Exceptions;
+using Application.Features.Persons.Commands;
 using Domain.Interfaces;
 using MediatR;
 
 namespace Application.Features.Persons.Handlers
 {
-    public class PersonDeleteCommandHandler : IRequestHandler<PersonDeleteCommand, bool>
-    {
-        private readonly IPersonRepository _personRepository;
+	public class PersonDeleteCommandHandler(
+		IPersonRepository personRepository) : IRequestHandler<PersonDeleteCommand, bool>
+	{
+		public async Task<bool> Handle(PersonDeleteCommand command, CancellationToken cancellationToken)
+		{
+			var id = command.Id;
 
-        public PersonDeleteCommandHandler(IPersonRepository personRepository)
-        {
-            _personRepository = personRepository;
-        }
+			var result = await personRepository.Delete(id);
 
-        public async Task<bool> Handle(PersonDeleteCommand request, CancellationToken cancellationToken)
-        {
-            return await _personRepository.Delete(request.Id);
-        }
-    }
+			if (!result)
+				throw new EntityNotFoundException($"Entity with id: [{id}] wasn't found");
+
+			return result;
+		}
+	}
 }

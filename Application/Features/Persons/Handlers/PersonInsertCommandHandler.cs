@@ -1,23 +1,27 @@
-﻿using Application.Features.Persons.Commands;
+﻿using Application.Exceptions;
+using Application.Features.Persons.Commands;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 
 namespace Application.Features.Persons.Handlers
 {
-	public class PersonInsertCommandHandler : IRequestHandler<PersonInsertCommand, Person?>
+	public class PersonInsertCommandHandler(
+		IPersonRepository personRepository,
+		IMapper mapper)
+		: IRequestHandler<PersonInsertCommand, Person?>
 	{
-		private readonly IPersonRepository _personRepository;
-
-		public PersonInsertCommandHandler(IPersonRepository personRepository)
+		public async Task<Person?> Handle(PersonInsertCommand command, CancellationToken cancellationToken)
 		{
-			_personRepository = personRepository;
-		}
-		public async Task<Person?> Handle(PersonInsertCommand request, CancellationToken cancellationToken)
-		{
-			var createdPerson = new Person(request.Id, request.Name, request.Age);
+			var request = command.Request;
 
-			return await _personRepository.Insert(createdPerson);
+			var person = mapper.Map<Person>(request);
+
+			var result = await personRepository.Insert(person) ??
+				throw new EntityAlreadyExistException("Could not insert entity, because it already exist in our database");
+
+			return result;
 		}
 	}
 }

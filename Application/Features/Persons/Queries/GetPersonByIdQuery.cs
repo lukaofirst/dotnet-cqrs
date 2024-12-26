@@ -1,14 +1,10 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs;
 using MediatR;
 
 namespace Application.Features.Persons.Queries
 {
-    public class GetPersonByIdQuery : IRequest<Person>
-    {
-        public int Id { get; set; }
-        public GetPersonByIdQuery(int id)
-        {
-            Id = id;    
-        }
-    }
+	public class GetPersonByIdQuery(int id) : IRequest<PersonDTO>
+	{
+		public int Id { get; set; } = id;
+	}
 }

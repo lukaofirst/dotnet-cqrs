@@ -25,9 +25,6 @@ namespace IoC
 			// Repositories
 			services.AddScoped<IPersonRepository, PersonRepository>();
 
-			// Services
-			services.AddScoped<IPersonService, PersonService>();
-
 			// AutoMapper
 			services.AddAutoMapper(typeof(DomainToDTO));
 			services.AddAutoMapper(typeof(DomainToCommand));
