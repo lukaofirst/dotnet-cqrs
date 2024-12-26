@@ -2,7 +2,6 @@
 using Application.Exceptions;
 using Application.Features.Persons.Queries;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 

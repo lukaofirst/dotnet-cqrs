@@ -6,8 +6,8 @@ namespace Domain.Interfaces
 	{
 		Task<List<Person>> GetAll();
 		Task<Person?> GetById(int id);
-		Task<Person?> Insert(Person person);
-		Task<Person?> Update(Person person);
+		Task<bool> Insert(Person person);
+		Task<bool> Update(Person person, Person updatedPerson);
 		Task<bool> Delete(int id);
 	}
 }

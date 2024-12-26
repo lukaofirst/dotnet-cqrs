@@ -1,10 +1,9 @@
 ﻿using Application.DTOs;
-using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.Persons.Commands
 {
-	public abstract class PersonCommand(PersonDTO request) : IRequest<Person>
+	public abstract class PersonCommand(PersonDTO request) : IRequest<Unit>
 	{
 		public PersonDTO Request { get; set; } = request;
 	}

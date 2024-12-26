@@ -10,18 +10,22 @@ namespace Application.Features.Persons.Handlers
 	public class PersonUpdateCommandHandler(
 		IPersonRepository personRepository,
 		IMapper mapper)
-		: IRequestHandler<PersonUpdateCommand, Person?>
+		: IRequestHandler<PersonUpdateCommand, Unit>
 	{
-		public async Task<Person?> Handle(PersonUpdateCommand command, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(PersonUpdateCommand command, CancellationToken cancellationToken)
 		{
 			var request = command.Request;
 
-			var person = mapper.Map<Person>(request);
+			var updatedPerson = mapper.Map<Person>(request);
 
-			var result = await personRepository.Update(person) ??
+			var person = await personRepository.GetById(updatedPerson.Id);
+
+			if (person is null)
 				throw new EntityNotFoundException("Could not update entity, because it doesn't exist in our database");
 
-			return result;
+			await personRepository.Update(person, updatedPerson);
+
+			return Unit.Value;
 		}
 	}
 }
