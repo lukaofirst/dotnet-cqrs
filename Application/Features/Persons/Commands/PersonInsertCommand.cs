@@ -3,7 +3,7 @@
 namespace Application.Features.Persons.Commands
 {
 	public class PersonInsertCommand(PersonDTO request)
-		: PersonCommand(request)
+		: BasePersonCommand(request)
 	{
 	}
 }
