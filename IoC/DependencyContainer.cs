@@ -10,7 +10,7 @@ namespace IoC;
 
 public static class DependencyContainer
 {
-	public static IServiceCollection StartServices(this IServiceCollection services, IConfiguration config)
+	public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration config)
 	{
 		// Database
 		services.AddDbContext<DataContext>(opt =>

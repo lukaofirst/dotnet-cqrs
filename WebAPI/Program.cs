@@ -3,7 +3,8 @@ using IoC;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.StartServices(builder.Configuration);
+builder.Services.AddServices(builder.Configuration);
+
 builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
