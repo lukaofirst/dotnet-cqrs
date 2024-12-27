@@ -1,13 +1,12 @@
 ﻿using Domain.Entities;
 
-namespace Domain.Interfaces
+namespace Domain.Interfaces;
+
+public interface IPersonRepository
 {
-	public interface IPersonRepository
-	{
-		Task<List<Person>> GetAll();
-		Task<Person?> GetById(int id);
-		Task<bool> Insert(Person person);
-		Task<bool> Update(Person person, Person updatedPerson);
-		Task<bool> Delete(int id);
-	}
+	Task<List<Person>> GetAll();
+	Task<Person?> GetById(int id);
+	Task<bool> Insert(Person person);
+	Task<bool> Update(Person person, Person updatedPerson);
+	Task<bool> Delete(int id);
 }

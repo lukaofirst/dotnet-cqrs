@@ -1,10 +1,5 @@
-﻿namespace Application.Exceptions
-{
-    public class EntityNotFoundException : ApplicationException
-    {
-        public EntityNotFoundException(string message) : base(message)
-        {
+﻿namespace Application.Exceptions;
 
-        }
-    }
+public class EntityNotFoundException(string message) : ApplicationException(message)
+{
 }

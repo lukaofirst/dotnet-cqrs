@@ -1,14 +1,7 @@
-﻿namespace Application.Responses
-{
-	public class ErrorResponse
-	{
-		public string? Message { get; }
-		public int StatusCode { get; }
+﻿namespace Application.Responses;
 
-		public ErrorResponse(string message, int statusCode)
-		{
-			Message = message;
-			StatusCode = statusCode;
-		}
-	}
+public class ErrorResponse(string message, int statusCode)
+{
+	public string? Message { get; } = message;
+	public int StatusCode { get; } = statusCode;
 }

@@ -2,13 +2,12 @@
 using AutoMapper;
 using Domain.Entities;
 
-namespace Application.Mappings
+namespace Application.Mappings;
+
+public class DomainToDTO : Profile
 {
-    public class DomainToDTO : Profile
-    {
-        public DomainToDTO()
-        {
-            CreateMap<Person, PersonDTO>().ReverseMap();
-        }
-    }
+	public DomainToDTO()
+	{
+		CreateMap<Person, PersonDTO>().ReverseMap();
+	}
 }

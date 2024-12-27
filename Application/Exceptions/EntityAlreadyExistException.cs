@@ -1,10 +1,5 @@
-﻿namespace Application.Exceptions
-{
-    public class EntityAlreadyExistException : ApplicationException
-    {
-        public EntityAlreadyExistException(string message) : base(message)
-        {
+﻿namespace Application.Exceptions;
 
-        }
-    }
+public class EntityAlreadyExistException(string message) : ApplicationException(message)
+{
 }

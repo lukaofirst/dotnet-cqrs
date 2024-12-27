@@ -5,21 +5,20 @@ using AutoMapper;
 using Domain.Interfaces;
 using MediatR;
 
-namespace Application.Features.Persons.Handlers
+namespace Application.Features.Persons.Handlers;
+
+public class GetPersonByIdQueryHandler(
+	IPersonRepository personRepository,
+	IMapper mapper)
+	: IRequestHandler<GetPersonByIdQuery, PersonDTO>
 {
-	public class GetPersonByIdQueryHandler(
-		IPersonRepository personRepository,
-		IMapper mapper)
-		: IRequestHandler<GetPersonByIdQuery, PersonDTO>
+	public async Task<PersonDTO> Handle(GetPersonByIdQuery command, CancellationToken cancellationToken)
 	{
-		public async Task<PersonDTO> Handle(GetPersonByIdQuery command, CancellationToken cancellationToken)
-		{
-			var id = command.Id;
+		var id = command.Id;
 
-			var result = await personRepository.GetById(id) ??
-				throw new EntityNotFoundException($"Entity with id: [{id}] wasn't found");
+		var result = await personRepository.GetById(id) ??
+			throw new EntityNotFoundException($"Entity with id: [{id}] wasn't found");
 
-			return mapper.Map<PersonDTO>(result);
-		}
+		return mapper.Map<PersonDTO>(result);
 	}
 }
