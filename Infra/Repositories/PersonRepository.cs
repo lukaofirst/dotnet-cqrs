@@ -24,6 +24,14 @@ public class PersonRepository(DataContext context) : IPersonRepository
 		return person!;
 	}
 
+	public async Task<Person?> GetByName(string? name)
+	{
+		var person = await context.Persons!
+			.FirstOrDefaultAsync(x => x.Name == name);
+
+		return person!;
+	}
+
 	public async Task<bool> Insert(Person person)
 	{
 		await context.Persons!.AddAsync(person);

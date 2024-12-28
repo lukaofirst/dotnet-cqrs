@@ -16,12 +16,12 @@ public class PersonUpdateCommandHandler(
 	{
 		var request = command.Request;
 
-		var updatedPerson = mapper.Map<Person>(request);
-
-		var person = await personRepository.GetById(updatedPerson.Id);
+		var person = await personRepository.GetById(request.Id);
 
 		if (person is null)
-			throw new EntityNotFoundException("Could not update entity, because it doesn't exist in our database");
+			throw new EntityNotFoundException("Could not update entity, because it doesn't exist in database");
+
+		var updatedPerson = mapper.Map<Person>(request);
 
 		await personRepository.Update(person, updatedPerson);
 

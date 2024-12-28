@@ -16,12 +16,12 @@ public class PersonInsertCommandHandler(
 	{
 		var request = command.Request;
 
-		var person = mapper.Map<Person>(request);
-
-		var personExist = await personRepository.GetById(person.Id);
+		var personExist = await personRepository.GetByName(request.Name);
 
 		if (personExist is not null)
-			throw new EntityAlreadyExistException("Entity already exist in our database");
+			throw new EntityAlreadyExistException("Entity already exist in database");
+
+		var person = mapper.Map<Person>(request);
 
 		await personRepository.Insert(person);
 
